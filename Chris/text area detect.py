@@ -103,13 +103,14 @@ def pre_process(img):
 
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(3,3))
     inner_page = cv2.cvtColor(inner_page,cv2.COLOR_BGR2GRAY)
-    thresh, inner_page = cv2.threshold(inner_page, 110, 255, cv2.THRESH_BINARY)
+    thresh, inner_page = cv2.threshold(inner_page, 90, 255, cv2.THRESH_BINARY)
     inv = cv2.bitwise_not(inner_page)
     inv = cv2.morphologyEx(inv, cv2.MORPH_CLOSE, kernel)
     #img = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
     inner_page = cv2.bitwise_not(inv)
 
-    inner_page = cv2.GaussianBlur(inner_page,(5,5),0)
+    inner_page = cv2.GaussianBlur(inner_page,(3,3),0)
+    cv2.imwrite(r"C:\Users\rawdo\Documents\year 4\project\outinnerpage.PNG", inner_page)
     return inner_page
 
 def find_info_contour(page_binary):
@@ -150,16 +151,15 @@ def find_right(iList, d):
     height = d['height'][currentI]
     left = d['left'][currentI]
     top = d['top'][currentI]
-    k = 1.5
+    k = 1
     y = 0.1
 
     for i, val in enumerate(d['top']):
         text = d['text'][i]
         isText = text != '' and text != d['text'][currentI] 
         isNotOld = i != currentI
-        if val <  top + int(height*y) and val > top - int(height*y) and isText and isNotOld:
+        if top - int(height*y) < val <  top + int(height*y) and isText and isNotOld:
             if left + int(width + k*height) > d['left'][i] and d['left'][i] > left:
-                
                 
                 iList.append(i)
                 find_right(iList, d)
