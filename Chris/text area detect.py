@@ -9,16 +9,23 @@ import os
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract'
 
 def main():
+    single_building = True
     directory = r"C:\Users\rawdo\Documents\year 4\project\Building Plans Full\PNG"
-    buildDr = r"C:\Users\rawdo\Documents\year 4\project\Building Plans\County Main MC010.pdf"
+    buildDir = r"C:\Users\rawdo\Documents\year 4\project\Building Plans Full\PNG\Management School MC075_2.PNG"
     meta_CSV_path = r"C:\Users\rawdo\Documents\year 4\project\Building Plans Full\Floor_Plan_Metadata.csv"
     buildingDFs = []
     buildings = []
-    paths  = [page.path for page in os.scandir(directory)]
+
+    if single_building == True: # for easier debugging
+        DF = process(buildDir)
+        print(DF)
+        return
+    else:
+        paths  = [page.path for page in os.scandir(directory)]
 
     m_data = pd.read_csv(meta_CSV_path, index_col = 0)
     print(m_data)
-    def sorter(path):
+    def path_sorter(path):
         split1 = path.split("_")[-1]
         split2 = split1.split(".")[0]
         return int(split2)
@@ -30,7 +37,7 @@ def main():
 
     for building in buildings:
         orderedBuilding = building
-        orderedBuilding.sort(key = sorter)
+        orderedBuilding.sort(key = path_sorter)
         print(orderedBuilding)
         floorDFs = [process(floor) for floor in orderedBuilding]
         
@@ -71,10 +78,10 @@ def process(path):
     dTemp = {}
 
     for key in d:
-        dTemp[key] = [d[key][i] for i, text in enumerate(d['text']) if text != '']
+        dTemp[key] = [d[key][i] for i, text in enumerate(d['text']) if text != '']#removing whitespace in d
     d = dTemp
     print(d['text'])
-    r = find_room_names(d)
+    r = find_room_areas(d)
     pageDF = pd.DataFrame(r)
     pageDF['PNG_title'] = path
     print(pageDF)
@@ -114,16 +121,11 @@ def pre_process(img):
     return inner_page
 
 def find_info_contour(page_binary):
-
-    contourimg = np.zeros_like(page_binary)
     contours, hierarchy = cv2.findContours(page_binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
     hierarchy = hierarchy[0]
     cnts = list(zip(contours, hierarchy))
-    for cnt in cnts:
-        if cnt[1][3] < 0:
-            biggest = cnt
-            break
-    
+    biggest = max(cnts, key = lambda k: cv2.contourArea(k[0])) #biggest cntour 
+
     def layer_maker(cnts, cnt):
         cur = cnt[-1]
         nextIndex = cur[1][0]
@@ -166,7 +168,7 @@ def find_right(iList, d):
 
     return(iList)        
 
-def find_room_names(d):
+def find_room_areas(d):
     r = {'room_name': [], 'room_desc': [], 'room_area': []}
     if len(d["text"]) == 0:
         return r
@@ -219,14 +221,14 @@ def find_room_names(d):
             #print("abovelist = ", aboveList)
             #print([d['text'][item] for item in aboveList])
 
-            desc, name = return_desc_name(aboveList, d)
+            desc, name = find_desc_name(aboveList, d)
             r['room_name'].append(name)
             r['room_desc'].append(desc)
             r['room_area'].append(area)
             print(name, desc, area)
     return(r)    
 
-def return_desc_name(aboveList, d):
+def find_desc_name(aboveList, d):
     IDpattern = re.compile(r'[A-Za-z]+[0-9]+')
 
     desc = ''
@@ -243,7 +245,7 @@ def return_desc_name(aboveList, d):
             #print('name =',name)
             break
         else:
-            iList = find_right([closest], d)
+            iList = [closest]#find_right([closest], d)
             closestText = [d['text'][i] for i in iList]
             closestText = " ".join(closestText)
             desc = closestText + " " + desc
@@ -252,12 +254,6 @@ def return_desc_name(aboveList, d):
         aboveList.remove(closest)
         #print(aboveList)
     return(desc, name)
-
-#def post_process(DF):
-    #Q o0 Aa Ww etc ]]|\
-   # DF.room_desc.str.replace(r'[\[\]\\\|\}\{\_\=\@\~\#\:\;\?\>\<\!\£\$\%\^\&\*\(\)]', "", regex = True )
-
-   # return DF
 
 main()
 print('done')

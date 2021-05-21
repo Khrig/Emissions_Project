@@ -2,42 +2,36 @@ import cv2
 import pandas as pd
 import numpy as np
 import os
-import re
 
 def main():
     directory = r"C:\Users\rawdo\Documents\year 4\project\Building Plans\campus\PNGs"
     CSVPath = r"C:\Users\rawdo\Documents\year 4\project\all_building_areas1.4_GF_CORRECTED.csv"
     scale_path = r"C:\Users\rawdo\Documents\year 4\project\manual scale.CSV"
     
-    buildingDFs = []
-    buildings = []
-    paths  = [page.path for page in os.scandir(directory)]
     data = pd.read_csv(CSVPath)
     manual_scale = pd.read_csv(scale_path)
 
     airAreas = data.groupby(["PNG_title"], as_index = True )["room_area"].sum()
 
-    floors = data.drop_duplicates("PNG_title")
-    floors = floors.set_index("PNG_title")
-    #floors = floors.drop(columns = ["Unnamed: 0", "room_name", "room_desc", "room_area", "drawing_number"])
-    floors = floors.drop(columns = ["room_name", "room_desc", "room_area", "path", "drawing number"])
-    floors["area_air"] = airAreas
-    print(floors.index)
-    print(manual_scale["path"])
-    print(manual_scale)
-    for path in manual_scale["path"]:
-        print(floors.index.get_loc(path))
-        floors["scale"].iloc[floors.index.get_loc(path)] = manual_scale["scale"][manual_scale["path"] == path]
-    
+    f_df = data.drop_duplicates("PNG_title")
+    f_df = f_df.set_index("PNG_title")
+    f_df = f_df.drop(columns = ["room_name", "room_desc", "room_area", "path", "drawing number"])
+    f_df["area_air"] = airAreas
+
+    for path in manual_scale["path"]: #changes the scale for buildings with the wrong scale in the plan
+        f_df.loc[f_df.index == path, "scale"] = manual_scale["scale"][manual_scale["path"] == path]
+    #    f_df["scale"].iloc[f_df.index.get_loc(path)] = manual_scale["scale"][manual_scale["path"] == path]
+   
+    #could do with putting this in a file, especially for more buildings
     heights = {"MC052":11.9, "MC064":15.47, "MC062":40.1, "MC029":8.03, "MC010":13.7, "MC031":10.44, "MC047":2.95, "MC078":15.1}
-    roofHeight = 0.3
+    roof_height = 0.3
     
-    imgList = [img.path for img in os.scandir(directory)]
+    imgList = [img.path for img in os.scandir(directory) if img.path[-3:-1] != "csv"]
     perimList = []
     areaList = []
-    disp_paths = [] # put paths that you want to look at in here
+    disp_paths = [] # put paths that you want to be dsiplayed in here
 
-    for path in floors.index:
+    for path in f_df.index:
         
         modifiedPath = directory + "\\" + path.split("\\")[-1]
         if modifiedPath in imgList:
@@ -48,8 +42,8 @@ def main():
             continue
 
         print(path)
-        size = floors.at[path, "paper size"]
-        scale = floors.at[path, "scale"]
+        size = f_df.at[path, "paper size"]
+        scale = f_df.at[path, "scale"]
 
         if path in disp_paths:
             disp = True
@@ -58,7 +52,7 @@ def main():
 
         pixArea, pixPerimeter = process(page, disp)
         print(pixArea, pixPerimeter)
-        mpp = pixel_to_meter(page, scale, size)
+        mpp = pixel_to_meter(page, scale, size) #meters per pixel
         print(mpp)
         area = pixArea*mpp*mpp
         perimeter = pixPerimeter*mpp
@@ -67,48 +61,41 @@ def main():
         perimList.append(perimeter)
         print("perimeter =", perimeter, "area = ", area)
 
-    floors["perimeter"] = perimList
-    floors["area_total"] = areaList
+    f_df["perimeter"] = perimList
+    f_df["area_total"] = areaList
 
-    floors["area_wall"] = floors["area_total"]-floors["area_air"]
-    floors["area_wall"][floors["area_wall"]<0] = 0
-    floors["volume_air"] = 0
-    floors["volume_wall"] = 0
-    floors["surface_area_wall"] = 0
-    floors["surface_area_roof"] = 0
-    print(floors)
-    for name in heights:
-        print(heights)
-        floorHeight = heights[name]/floors["building number"].value_counts()[name] - roofHeight
-        print(floorHeight)
-        print(name )
-        floors["volume_air"][floors["building number"] == name]= floorHeight * floors["area_air"][floors["building number"] == name]
-        floors["volume_wall"][floors["building number"] == name]= floorHeight * floors["area_wall"][floors["building number"] == name] + roofHeight*floors["area_total"][floors["building number"] == name]
-        floors["surface_area_wall"][floors["building number"] == name]= (floorHeight + roofHeight) * perimeter
+    f_df["area_wall"] = f_df["area_total"]-f_df["area_air"]
+    f_df.loc[f_df["area_wall"] < 0, "area_wall"] = 0
+    f_df["volume_air"] = 0
+    f_df["volume_wall"] = 0
+    f_df["surface_area_wall"] = 0
+    f_df["surface_area_roof"] = 0
+
+    for name in heights: #for each building we have a height for
+        bool_name_list = f_df["building number"] == name 
+        floor_count = f_df["building number"].value_counts()[name] #number of floors
+        floor_height = (heights[name]/floor_count) - roof_height #height of each floor
+        f_df.loc[bool_name_list, "volume_air"] = floor_height * f_df["area_air"][bool_name_list] #air volume in each floor
+        roof_volume = roof_height * f_df["area_total"][bool_name_list] #volume of floor, as in what you stand on
+        f_df.loc[bool_name_list, "volume_wall"] = floor_height * f_df["area_wall"][bool_name_list] + roof_volume #volume of wall in each floor
+        f_df.loc[bool_name_list, "surface_area_wall"] = (floor_height + roof_height) * perimeter #external surface area of each floor
         
-
-
-    for i, each in enumerate(floors["area_total"]):
+    for i in range(len(f_df.index)): # finding roof area by comparing above floor area to below floor area
     
-        if i+1 >= len(floors.index):
-            print(floors.index[i], "i+1 greater than length")
-
-            floors["surface_area_roof"].iloc[i] = floors["area_total"].iloc[i]
+        if i+1 >= len(f_df.index):
+            f_df["surface_area_roof"].iloc[i] = f_df["area_total"].iloc[i]
         else:
-            if floors["building number"].iloc[i] != floors["building number"].iloc[i+1]:
-                print(floors.index[i], "next is first floor")
-                floors["surface_area_roof"].iloc[i] = floors["area_total"].iloc[i]
+            if f_df["building number"].iloc[i] != f_df["building number"].iloc[i+1]:
+                f_df["surface_area_roof"].iloc[i] = f_df["area_total"].iloc[i]
             else:
-                floors["surface_area_roof"].iloc[i] = floors["area_total"].iloc[i] - floors["area_total"].iloc[i+1]
+                f_df["surface_area_roof"].iloc[i] = f_df["area_total"].iloc[i] - f_df["area_total"].iloc[i+1]
         
+    f_df.loc[f_df["surface_area_roof"] < 0, "surface_area_roof"] = 0  #removes small negative values from error
+    f_df["index"] = [i for i in range(len(f_df.index))]
+    f_df = f_df.set_index("index")
+    path = directory + "\\floor_volumes1.1.csv"
+    f_df.to_csv(path)
 
-    floors["surface_area_roof"].loc[floors["surface_area_roof"] < 0]= 0  #removes small negative values
-    floors["index"] = [i for i in range(len(floors.index))]
-    floors = floors.set_index("index")
-    path = directory + "\\floor_volumes_1.0.csv"
-    floors.to_csv(path)
-
-     
 def pixel_to_meter(page, scale, size): #figure out pixel scale with image size paper size and scale
     scale = float(scale)
     print("scale = ", scale)
@@ -135,7 +122,7 @@ def process(page, disp):
     buildingPerimeter = sum([cv2.arcLength(cnt, True) for cnt in bcs])
     cv2.drawContours(page,bcs,-1,[0,255,0], 20)
     if disp:
-        resized = cv2.resize(page, (1920,1080))
+        resized = cv2.resize(page, (1620,780))
         cv2.imshow('page', resized)
         cv2.waitKey()
     # resized = cv2.resize(pageBinary, (1920,1080))
@@ -155,15 +142,10 @@ def pre_process(page):
     return pageBinary
 
 def find_building_contours(pageBinary):
-
-    contourimg = np.zeros_like(pageBinary)
     contours, hierarchy = cv2.findContours(pageBinary, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
     hierarchy = hierarchy[0]
     cnts = list(zip(contours, hierarchy))
-    for cnt in cnts:
-        if cnt[1][3] < 0:
-            biggest = cnt
-            break
+    biggest = max(cnts, key = lambda k: cv2.contourArea(k[0])) #biggest cntour 
     
     def layer_maker(cnts, cnt):
         cur = cnt[-1]
@@ -190,9 +172,6 @@ def find_building_contours(pageBinary):
         if cv2.contourArea(cnt[0]) >= maxArea - maxArea/3:  #removes small contours e.g. text
             buildingContours.append(cnt[0])
         
-    return buildingContours
-    
-def calculate_thermal(d):
-    
+    return buildingContours    
 
 main()
