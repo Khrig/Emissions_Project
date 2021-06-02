@@ -11,13 +11,13 @@ pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tessera
 def main():
     single_building = True
     directory = r"C:\Users\rawdo\Documents\year 4\project\Building Plans Full\PNG"
-    buildDir = r"C:\Users\rawdo\Documents\year 4\project\Building Plans Full\PNG\County Main MC010_1.png"
+    buildDir = r"C:\Users\rawdo\Documents\year 4\project\Building Plans Full\PNG\County Main MC010_1.PNG"
     meta_CSV_path = r"C:\Users\rawdo\Documents\year 4\project\Building Plans Full\Floor_Plan_Metadata.csv"
     buildingDFs = []
     buildings = []
 
     if single_building == True: # for easier debugging
-        DF = process(buildDir)
+        DF = process(buildDir, single_building)
         print(DF)
         return
     else:
@@ -38,7 +38,7 @@ def main():
         ordered_building = building
         ordered_building.sort(key = path_sorter)
         print(ordered_building)
-        floorDFs = [process(floor) for floor in ordered_building]
+        floorDFs = [process(floor, single_building) for floor in ordered_building]
         
         buildingDF = pd.concat(floorDFs, ignore_index = True)
         buildingDFs.append(buildingDF)
@@ -49,7 +49,7 @@ def main():
     allDFs = pd.merge(m_data, allDFs, on = "name")
     allDFs.drop(columns = ["name", "path"])
 
-    allDFs.to_csv('all_building_areas1.4.csv')
+    allDFs.to_csv(directory + '\\' +'all_building_areas1.5.csv')
 
     # with pd.ExcelWriter('room_areas.xlsx') as writer:
     #    for i, DF in enumerate(buildingDFs):
@@ -64,7 +64,7 @@ def trim_path(path):
     name = name_and_file_ext.split(".")[0]
     return name
 
-def process(path):
+def process(path, single_building):
     page = cv2.imread(path)
     page_array = np.asarray(page)
     page_gray, displacement = pre_process(page_array)
@@ -82,8 +82,8 @@ def process(path):
     r = find_room_areas(d)
     #convert desc,name,area locations back to full size
     r = convert_boxes(r, displacement)
-    print(displacement)
-    draw_boxes(page, r, path)
+    if single_building:
+        draw_boxes(page, r, path)
     pageDF = pd.DataFrame(r)
     pageDF['PNG_title'] = path
 

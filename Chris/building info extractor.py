@@ -38,11 +38,8 @@ def find_info(d): #finds the type and value of information in each box
     for m in match_list:
         if re.search(m, d, flags = re.I):
             if m == "scale":    #special case for scale because it contains a colon
-                print(d)
                 val = d.split(" ")[-1]
-                print(val)
                 val = convert_scale(val)
-                print(val)
             else:
                 val = d.split(":")[-1]
                 if val[0] == " ": # trim space if exists

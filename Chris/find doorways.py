@@ -2,8 +2,7 @@ import cv2
 import numpy as  np
 
 def main():
-    
-    img = cv2.imread(r"C:\Users\rawdo\Documents\year 4\project\floor_plan.jpg") #path to floorplan image
+    img = cv2.imread(r"C:\Users\rawdo\Documents\year 4\project\floor_plan_2.jpg") #path to floorplan image
     resize = cv2.resize(img,(736,606))
     blur = cv2.GaussianBlur(resize,(3,3),0)
     gray=cv2.cvtColor(blur,cv2.COLOR_BGR2GRAY)
@@ -79,7 +78,9 @@ def main():
     cv2.imshow('contours',contourimg)
     cv2.waitKey()
     cv2.imshow('gray_doorways', gray_doorways)
-    cv2.waitKey()    
+    cv2.waitKey()
+    cv2.imshow('skeleton', skele)
+    cv2.waitKey()  
 
 def hitmiss(gray, kernels, n):
 

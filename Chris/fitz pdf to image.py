@@ -8,8 +8,7 @@ def topng(path):
         doc = fitz.open(path)
     except: 
         return [path]
-    xres = 300
-    yres = 300
+    dpi = 300
     pathtrim = path[1:-4]
     name = pathtrim.split("\\")[-1]
     
@@ -17,8 +16,8 @@ def topng(path):
     for i, p in enumerate(doc):
         try:
             page = doc.loadPage(i)  # number of page
-            pix = page.getPixmap(matrix=fitz.Matrix(300/72,300/72))
-            pix.setResolution(xres, yres)
+            pix = page.getPixmap(matrix=fitz.Matrix(dpi/72,dpi/72))
+            pix.setResolution(dpi, dpi)
             output = name + "_" + str(i) + ".png"
             print(output)
             pix.writePNG(output)
