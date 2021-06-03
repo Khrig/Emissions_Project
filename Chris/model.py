@@ -1,4 +1,3 @@
-import math
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.integrate import odeint
@@ -27,8 +26,8 @@ print(thermDF)
 T_out = 12 + 273
 U_wall = thermDF.at[building, "total_UA"]
 U_wall_ext = U_wall
-U_wall_in = U_wall*7
-vent_const = thermDF.at[building, "ventilation_constant"]/1.5
+U_wall_in = U_wall
+vent_const = thermDF.at[building, "ventilation_constant"]
 air_cap = thermDF.at[building, "air_cap"]
 wall_cap = thermDF.at[building, "wall_cap"]
 T_in_initial_air = 21+273
@@ -77,8 +76,10 @@ print(result[:,0]-273)
 result_degrees_wall = result[:,0]/wall_cap -273
 result_degrees_air = result[:,1]/air_cap -273
 
-
-    
+pd.DataFrame([[result_degrees_air]])
+d= {"Air Temperature": result_degrees_air, "Wall Temperature" : result_degrees_wall, "data" : data_list}
+df = pd.DataFrame(d, t_hours)
+df.to_csv(r"C:\Users\rawdo\Documents\year 4\project\thermal data\George Fox.csv")
 plt.plot(t_hours, result_degrees_air, label =  'Air Temp')
 plt.plot(t_hours, result_degrees_wall, label =  'Wall Temp')
 plt.plot(t_hours, data_list, label =  'Data')
