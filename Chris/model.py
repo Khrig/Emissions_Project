@@ -2,8 +2,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.integrate import odeint
 import pandas as pd
-data_dir = r"C:\Users\rawdo\Documents\year 4\project\thermal data"
-thermal_results_csv_path = r"C:\Users\rawdo\Documents\year 4\project\Thermal Results.csv"
+import os
+
+cur_dir = os.path.dirname(os.path.realpath(__file__)) # gets directory
+
+data_dir = cur_dir + "\\past data"
+thermal_results_csv_path = cur_dir + "\\results\\Thermal Results.csv"
 thermDF = pd.read_csv(thermal_results_csv_path, index_col = 0)
 building = "George Fox MC078"
 data_csv_path = data_dir + "\\" + building + ".csv"
@@ -79,7 +83,8 @@ result_degrees_air = result[:,1]/air_cap -273
 pd.DataFrame([[result_degrees_air]])
 d= {"Air Temperature": result_degrees_air, "Wall Temperature" : result_degrees_wall, "data" : data_list}
 df = pd.DataFrame(d, t_hours)
-df.to_csv(r"C:\Users\rawdo\Documents\year 4\project\thermal data\George Fox.csv")
+df.to_csv(cur_dir + "\\results\\" + building)
+
 plt.plot(t_hours, result_degrees_air, label =  'Air Temp')
 plt.plot(t_hours, result_degrees_wall, label =  'Wall Temp')
 plt.plot(t_hours, data_list, label =  'Data')

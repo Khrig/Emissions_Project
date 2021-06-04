@@ -7,7 +7,8 @@ import pytesseract
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract'
 
 def main():
-    directory = r"C:\Users\rawdo\Documents\year 4\project\Building Plans Full\PNG"
+    cur_dir = os.path.dirname(os.path.realpath(__file__)) # gets directory
+    directory = cur_dir + "\\Building Plans\\PNGs"
     paths  = [page.path for page in os.scandir(directory)]
     all_meta_data = []
     for path in paths:
@@ -29,8 +30,7 @@ def main():
     m_d_frame = pd.DataFrame(all_meta_data)
     for each in ["AI", "Al"]:
         m_d_frame["paper size"][m_d_frame["paper size"] == each] = "A1"
-    #print(m_d_frame)
-    path = directory + "\\Floor_Plan_Metadata.csv"
+    path = cur_dir + "\\results"+"\\Floor_Plan_Metadata.csv"
     m_d_frame.to_csv(path)
 
 def find_info(d): #finds the type and value of information in each box

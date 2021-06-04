@@ -1,6 +1,6 @@
 
-#%%
 import pandas as pd
+import os
 
 def conduction(df, u_df, r_df): # find coefficients relating to conduction rate
     window_sa = 0.1 #TEMPORARY
@@ -41,8 +41,10 @@ def capacity(df, u_df, r_df, cp, air_density, envelope): # find heat capacity of
     return r_df
 
 def main():
-    U_value_csv_path = r"C:\Users\rawdo\Documents\year 4\project\U values.csv"
-    volume_csv_path = r"C:\Users\rawdo\Documents\year 4\project\floor_volumes1.1.csv"
+    cur_dir = os.path.dirname(os.path.realpath(__file__)) # gets directory
+
+    U_value_csv_path = cur_dir + "\\results\\U values.csv"
+    volume_csv_path = U_value_csv_path = cur_dir + "\\results\\floor_volumes1.1.csv"
     df = pd.read_csv(volume_csv_path, index_col = "index")
     u_df = pd.read_csv(U_value_csv_path) #u values dataframe for heat conduction
     df = df.drop(columns = ["Unnamed: 0", "scale", "paper size", "area_air", "perimeter", "area_wall"])
@@ -60,7 +62,7 @@ def main():
     r_df, envelope = ventilation(df, r_df, cp, air_density, u_df)
     print("envelope", envelope)
     r_df = capacity(df, u_df, r_df, cp, air_density, envelope)
-    r_df.to_csv(r"C:\Users\rawdo\Documents\year 4\project\Thermal Results.csv")
+    r_df.to_csv(cur_dir+"\\results\\Thermal Results.csv")
     print(r_df)
 
 main()

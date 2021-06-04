@@ -9,10 +9,12 @@ import os
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract'
 
 def main():
+    cur_dir = os.path.dirname(os.path.realpath(__file__)) # gets directory
+
     single_building = True
-    directory = r"C:\Users\rawdo\Documents\year 4\project\Building Plans Full\PNG"
-    buildDir = r"C:\Users\rawdo\Documents\year 4\project\Building Plans Full\PNG\County Main MC010_1.PNG"
-    meta_CSV_path = r"C:\Users\rawdo\Documents\year 4\project\Building Plans Full\Floor_Plan_Metadata.csv"
+    directory = cur_dir + "\\Building Plans\\PNGs"
+    buildDir = cur_dir + "\\Building Plans\\PNGs\\County Main MC010_1.PNG" # single building to use if single_building == True
+    meta_CSV_path = cur_dir + "\\results\\Floor_Plan_Metadata.csv"
     buildingDFs = []
     buildings = []
 
@@ -49,7 +51,7 @@ def main():
     allDFs = pd.merge(m_data, allDFs, on = "name")
     allDFs.drop(columns = ["name", "path"])
 
-    allDFs.to_csv(directory + '\\' +'all_building_areas1.5.csv')
+    allDFs.to_csv(cur_dir + '\\results\\all_building_areas1.5.csv')
 
     # with pd.ExcelWriter('room_areas.xlsx') as writer:
     #    for i, DF in enumerate(buildingDFs):
@@ -112,7 +114,6 @@ def pre_process(img):
     thresh, inner_page = cv2.threshold(inner_page, 90, 255, cv2.THRESH_BINARY)
 
     inner_page = cv2.GaussianBlur(inner_page,(3,3),0)
-    cv2.imwrite(r"C:\Users\rawdo\Documents\year 4\project\outinnerpage.PNG", inner_page)
     return inner_page, displacement
 
 def find_info_contour(page_binary):
@@ -260,7 +261,6 @@ def draw_boxes(page,r,path):
     col_area = [0,0,200]
     col_desc = [0,200,0]
     col_name = [200,0,0]
-    print(r["name_locs"])
 
     for loc in r["area_locs"]:
         cv2.rectangle(page, (loc["x1"], loc["y1"]), (loc["x2"], loc["y2"]), col_area, 5 )
@@ -276,7 +276,7 @@ def draw_boxes(page,r,path):
                 cv2.rectangle(page, (loc["x1"], loc["y1"]), (loc["x2"], loc["y2"]), col_desc, 5 )
             except:
                 continue
-    cv2.imwrite(r"C:\Users\rawdo\Documents\year 4\project\boxed_text.PNG", page)
+    #cv2.imwrite(r"C:\Users\rawdo\Documents\year 4\project\boxed_text.PNG", page) # use for writing text boxed images
     resized = cv2.resize(page, (1800,950))
     cv2.imshow('page', resized)
     cv2.waitKey()

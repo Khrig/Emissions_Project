@@ -5,10 +5,12 @@ import numpy as np
 import os
 
 def main():
-    directory = r"C:\Users\rawdo\Documents\year 4\project\Building Plans\campus\PNGs"
-    csv_path = r"C:\Users\rawdo\Documents\year 4\project\all_building_areas1.4,gfcmcorrect.csv"
-    scale_path = r"C:\Users\rawdo\Documents\year 4\project\manual scale.CSV"
-    height_csv_path = r"C:\Users\rawdo\Documents\year 4\project\building heights.csv"
+    cur_dir = os.path.dirname(os.path.realpath(__file__)) # gets directory
+    directory = cur_dir + r"\Building Plans Corrected"
+    csv_path = cur_dir + r"\results\all building areas corrected.csv"
+    scale_path = cur_dir + r"\results\all building areas corrected.csv"
+    height_csv_path = cur_dir + r"\results\building heights.csv"
+
     data = pd.read_csv(csv_path)
     manual_scale = pd.read_csv(scale_path)
     height_df = pd.read_csv(height_csv_path, index_col = 0)
@@ -24,7 +26,6 @@ def main():
         manual_scale_val = manual_scale["scale"].iloc[i]
         f_df.at[f_df.index == path, "scale"] = manual_scale_val
     print(f_df.index)
-    print(f_df.at[r"C:\Users\rawdo\Documents\year 4\project\Building Plans Full\PNG\George Fox MC078_0.png", "scale"])
 
     roof_height = 0.3
     
@@ -51,7 +52,7 @@ def main():
         else:
             disp = False
 
-        pixArea, pixPerimeter = process(page, disp)
+        pixArea, pixPerimeter = process(page, disp, cur_dir)
         print(path)
         print("pixel area, perimeter", pixArea, pixPerimeter)
         mpp = pixel_to_meter(page, scale, size) #meters per pixel
@@ -98,7 +99,7 @@ def main():
     f_df.loc[f_df["surface_area_roof"] < 0, "surface_area_roof"] = 0  #removes small negative values from error
     f_df["index"] = [i for i in range(len(f_df.index))]
     f_df = f_df.set_index("index")
-    path = directory + "\\floor_volumes1.1.csv"
+    path = cur_dir + r"\results\floor_volumes1.1.csv"
     f_df.to_csv(path)
 
 def pixel_to_meter(page, scale, size): #figure out pixel scale with image size paper size and scale
@@ -121,7 +122,7 @@ def pixel_to_meter(page, scale, size): #figure out pixel scale with image size p
 
     return (mpp)
 
-def process(page, disp):
+def process(page, disp, cur_dir):
     page_binary = pre_process(page)
     bcs = find_building_contours(page_binary)
     buildingArea = sum([cv2.contourArea(cnt) for cnt in bcs])        
@@ -131,7 +132,7 @@ def process(page, disp):
         resized = cv2.resize(page, (1620,780))
         cv2.imshow('page', resized)
         cv2.waitKey()
-        cv2.imwrite(r"C:\Users\rawdo\Documents\year 4\project\contour_out.PNG", page)
+        cv2.imwrite(cur_dir + "\\contour out.PNG", page)
     return buildingArea, buildingPerimeter
 
 def pre_process(page):

@@ -1,0 +1,55 @@
+name_fp,area_total,building name,roof_UA,wall_UA,window_UA,floor_UA,total_UA,ventilation_constant,wall_cap,air_cap
+Bailrigg House MC003,0,Bailrigg House,0,0,0,0,0,0,0,0
+Barker House Farm AP081,0,Barker House Farm,0,0,0,0,0,0,0,0
+Bigforth Farm MC007,0,Bigforth Farm,0,0,0,0,0,0,0,0
+Bowland ASH House MC042,823.2392419,Bowland ASH House,180.8246764,0,0,181.1126332,361.9373096,1869.434164,1228295562,0
+Bowland Annexe MC030,0,Bowland Annexe,0,0,0,0,0,0,0,0
+Bowland East MC052,291.6431263,Bowland East,52.52821926,197.9014132,135.3172056,64.1614878,449.9083258,1375.238497,903588569.9,2869117.317
+Bowland Hall MC029,0,Bowland Hall,0,0,0,0,0,0,0,2047759.855
+Bowland Hall Residences MC014,0,Bowland Hall Residences,0,0,0,0,0,0,0,0
+Bowland Main MC046,0,Bowland Main,0,0,0,0,0,0,0,0
+Bowland North MC043,0,Bowland North,0,0,0,0,0,0,0,0
+Bowland South MC064,791.6727944,Bowland South,147.2661088,497.4391773,340.129352,174.1680148,1159.002653,3603.25345,2959358176,6876095.647
+Bowland Tower MC062,131.8935536,Bowland Tower,54.51793611,512.5479538,350.4601393,29.0165818,946.542611,2460.888348,6063395336,3678042.395
+Central Workshops MC053,0,Central Workshops,0,0,0,0,0,0,0,0
+Chaplaincy Centre MC048,0,Chaplaincy Centre,0,0,0,0,0,0,0,0
+Charles Carter MC202,1007.323526,Charles Carter,211.6934545,467.2994608,319.5209988,221.6111757,1220.12509,4071.33125,3343791269,13656518.51
+County John Creed MC033,0,John Creed,0,0,0,0,0,0,0,0
+County Main MC010,1833.598202,County Main,679.1598065,1011.145225,691.3813504,403.3916044,2785.077986,9711.914415,7976411800,19549475.12
+County South MC032,1966.142312,County South,359.2510523,0,0,432.5513085,791.8023608,4052.182603,2662451562,0
+Croft MC001,0,Croft,0,0,0,0,0,0,0,0
+FASS MC041,0,FASS,0,0,0,0,0,0,0,0
+Faraday MC044,0,Faraday,0,0,0,0,0,0,0,0
+Furness College MC071,0,Furness College,0,0,0,0,0,0,0,0
+Fylde College MC072,0,Fylde College,0,0,0,0,0,0,0,0
+George Fox MC078,1723.058831,George Fox,317.2506882,958.6668117,655.4986747,379.0729427,2310.489117,7336.042141,4820083094,22312444.41
+Graduate College AP001-AP011,0,Graduate College,0,0,0,0,0,0,0,0
+Great Hall MC031,4078.862119,Great Hall,734.1951814,886.413157,606.0944663,897.3496661,3124.052471,11830.34777,3886513885,36665614.54
+Grizedale MC198,0,Grizedale College,0,0,0,0,0,0,0,0
+Human Resources Building MC207,0,Human Resources,0,0,0,0,0,0,0,0
+ISS MC197,0,ISS Building,0,0,0,0,0,0,0,0
+Infolab21 MC102,0,InfoLab21,0,0,0,0,0,0,0,0
+IsoLab MC213,0,IsoLab,0,0,0,0,0,0,0,0
+LEC MC068_69_70,0,"LEC 1, 2,3",0,0,0,0,0,0,0,0
+LICA MC200,0,LICA,0,0,0,0,0,0,0,0
+Lancaster Conference Centre MC103,0,Lancaster Conf. Centre,0,0,0,0,0,0,0,0
+Library MC065,1031.355832,Library,860.1141395,1119.925509,765.7610318,226.898283,2972.698963,10347.50784,6798740607,31350510.87
+Life Sciences and Environment Laboratories MC211,0,Life Sciences & Environment Laboratories,0,0,0,0,0,0,0,0
+Lonsdale House AP080,0,Lonsdale House,0,0,0,0,0,0,0,0
+Management School MC075,0,Management School,0,0,0,0,0,0,0,0
+Music Building MC013,0,Music Building,0,0,0,0,0,0,0,0
+PSC MC171,0,PSC,0,0,0,0,0,0,0,0
+Pendle College MC083,0,Pendle College,0,0,0,0,0,0,0,0
+Physics MC045,0,Physics,0,0,0,0,0,0,0,0
+Pre-School Centre MC067,0,Pre-School Centre,0,0,0,0,0,0,0,0
+Roundhouse MC011 @ A3,0,The Roundhouse,0,0,0,0,0,0,0,0
+Ruskin Library MC066,0,Ruskin Library,0,0,0,0,0,0,0,0
+Science and Technology MC076,0,Science & Technology,0,0,0,0,0,0,0,0
+Security Lodge MC050,0,Security Lodge,0,0,0,0,0,0,0,0
+Slaidburn House MC063,0,Slaidburn House,0,0,0,0,0,0,0,0
+Sports Centre MC204,0,Sports Centre,0,0,0,0,0,0,0,0
+University House MC051,0,University House,0,0,0,0,0,0,0,0
+Welcome Centre MC047,1289.317613,Welcome Centre,232.0771704,147.6783284,100.9766348,283.6498749,764.3820085,3218.267046,528633637.9,3463803.87
+Whewell Building MC077,0,Whewell Building,0,0,0,0,0,0,0,0
+cTAP MC212,0,cTAP,0,0,0,0,0,0,0,0
+engineering MC210,0,engineering,0,0,0,0,0,0,0,0
