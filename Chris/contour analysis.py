@@ -8,7 +8,7 @@ def main():
     cur_dir = os.path.dirname(os.path.realpath(__file__)) # gets directory
     directory = cur_dir + r"\Building Plans Corrected"
     csv_path = cur_dir + r"\results\all building areas corrected.csv"
-    scale_path = cur_dir + r"\results\all building areas corrected.csv"
+    scale_path = cur_dir + r"\results\manual scale.csv"
     height_csv_path = cur_dir + r"\results\building heights.csv"
 
     data = pd.read_csv(csv_path)
@@ -23,16 +23,16 @@ def main():
     f_df["area_air"] = airAreas
     print(manual_scale)
     for i, path in enumerate(manual_scale["path"]): #changes the scale for buildings with the wrong scale in the plan
-        manual_scale_val = manual_scale["scale"].iloc[i]
+        manual_scale_val = manual_scale["scale"].iloc[i] # so far this is only george fox
         f_df.at[f_df.index == path, "scale"] = manual_scale_val
     print(f_df.index)
 
     roof_height = 0.3
     
-    imgList = [img.path for img in os.scandir(directory) if img.path[-3:] != "csv"]
+    imgList = [img.path for img in os.scandir(directory) if img.path[-3:] == "png"]
     perimList = []
     areaList = []
-    disp_paths = []#["George Fox MC078_0", "Bowland South MC064_0", "Bowland South MC064_1", "Bowland South MC064_2", "Bowland South MC064_3", "Bowland South MC064_4", "Bowland Tower MC062_7"] # put buildings that you want to be dsiplayed in here in format "PNG name"_"floor number"
+    disp_paths = []#["Bowland South MC064_3", "Bowland South MC064_4", "Bowland Tower MC062_7"] # put buildings that you want to be dsiplayed in here in format "PNG name"_"floor number"
 
     for path in f_df.index:
         modifiedPath = directory + "\\" + path.split("\\")[-1]#original images were in a different directory
@@ -73,7 +73,7 @@ def main():
     f_df["volume_wall"] = 0
     f_df["surface_area_wall"] = 0
     f_df["surface_area_roof"] = 0
-#%%
+
     for name in height_df.index: #for each building we have a height for
         print(name.split(" ")[-1])
         f_df["building_num_from_path"]=f_df.index.str.split("//").str[-1].str.split("_").str[0].str.split(" ").str[-1]
@@ -85,7 +85,7 @@ def main():
         roof_volume = roof_height * f_df["area_total"][bool_name_list] #volume of floor, as in what you stand on
         f_df.loc[bool_name_list, "volume_wall"] = floor_height * f_df["area_wall"][bool_name_list] + roof_volume #volume of wall in each floor
         f_df.loc[bool_name_list, "surface_area_wall"] = (floor_height + roof_height) * f_df.loc[bool_name_list, "perimeter"] #external surface area of each floor
-#%%        
+
     for i in range(len(f_df.index)): # finding roof area by comparing above floor area to below floor area
     
         if i+1 >= len(f_df.index):
@@ -99,7 +99,7 @@ def main():
     f_df.loc[f_df["surface_area_roof"] < 0, "surface_area_roof"] = 0  #removes small negative values from error
     f_df["index"] = [i for i in range(len(f_df.index))]
     f_df = f_df.set_index("index")
-    path = cur_dir + r"\results\floor_volumes1.1.csv"
+    path = cur_dir + r"\results\floor_volumes.csv"
     f_df.to_csv(path)
 
 def pixel_to_meter(page, scale, size): #figure out pixel scale with image size paper size and scale
@@ -125,15 +125,15 @@ def pixel_to_meter(page, scale, size): #figure out pixel scale with image size p
 def process(page, disp, cur_dir):
     page_binary = pre_process(page)
     bcs = find_building_contours(page_binary)
-    buildingArea = sum([cv2.contourArea(cnt) for cnt in bcs])        
-    buildingPerimeter = sum([cv2.arcLength(cnt, True) for cnt in bcs])
+    building_area = sum([cv2.contourArea(cnt) for cnt in bcs])        
+    building_perimeter = sum([cv2.arcLength(cnt, True) for cnt in bcs])
     cv2.drawContours(page,bcs,-1,[200,0,200], 20)
     if disp:
         resized = cv2.resize(page, (1620,780))
         cv2.imshow('page', resized)
         cv2.waitKey()
         cv2.imwrite(cur_dir + "\\contour out.PNG", page)
-    return buildingArea, buildingPerimeter
+    return building_area, building_perimeter
 
 def pre_process(page):
     page = cv2.GaussianBlur(page,(3,3),0)

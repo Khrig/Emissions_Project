@@ -1,0 +1,8 @@
+pandas==1.2.0
+opencv_python==4.4.0.46
+pytesseract==0.3.7
+numpy==1.19.2
+fitz==0.0.1.dev2
+matplotlib==3.4.2
+Pillow==8.2.0
+scipy==1.6.3

@@ -1,4 +1,3 @@
-
 import pandas as pd
 import os
 
@@ -44,7 +43,7 @@ def main():
     cur_dir = os.path.dirname(os.path.realpath(__file__)) # gets directory
 
     U_value_csv_path = cur_dir + "\\results\\U values.csv"
-    volume_csv_path = U_value_csv_path = cur_dir + "\\results\\floor_volumes1.1.csv"
+    volume_csv_path = cur_dir + "\\results\\floor_volumes.csv"
     df = pd.read_csv(volume_csv_path, index_col = "index")
     u_df = pd.read_csv(U_value_csv_path) #u values dataframe for heat conduction
     df = df.drop(columns = ["Unnamed: 0", "scale", "paper size", "area_air", "perimeter", "area_wall"])

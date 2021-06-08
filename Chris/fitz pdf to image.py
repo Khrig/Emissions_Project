@@ -19,7 +19,6 @@ def topng(path, directory):
         print(output)
         pix.writePNG(output)
 
-
 directory = os.path.dirname(os.path.realpath(__file__)) # gets directory
 for building in os.scandir(directory + r"\Building Plans"):
     if building.path[-3:] == "pdf":

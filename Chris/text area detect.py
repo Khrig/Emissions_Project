@@ -11,9 +11,9 @@ pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tessera
 def main():
     cur_dir = os.path.dirname(os.path.realpath(__file__)) # gets directory
 
-    single_building = True
+    single_building = False
     directory = cur_dir + "\\Building Plans\\PNGs"
-    buildDir = cur_dir + "\\Building Plans\\PNGs\\County Main MC010_1.PNG" # single building to use if single_building == True
+    buildDir = cur_dir + "\\Building Plans\\PNGs\\George Fox MC078_1.PNG" # single building to use if single_building == True
     meta_CSV_path = cur_dir + "\\results\\Floor_Plan_Metadata.csv"
     buildingDFs = []
     buildings = []

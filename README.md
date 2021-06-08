@@ -1,41 +1,43 @@
-**Repository for fourth year project "Reducing Campus Emissions Using Machine Learning"**
+##Repository for fourth year project "Reducing Campus Emissions Using Machine Learning"##
 
-*Chris*
+#Chris
 
-Requirements:
-python 3.9
-pymupdf
-Open_CV
-pandas
-numpy
-pyTesseract
-Scipy
-matplotlib
+***
 
-Instructions:
+**Requirements:**
+in addition to Chris/requirements.txt, tesseract will need to be installed.
 
-Put pdf versions of plans in Chris/building plans
 
-run fits pdf to image
+**Instructions:**
 
-run building info extractor
+1. Put pdf versions of plans in Chris/building plans
 
-check metadata is ok in /results
+2. run fitz pdf to image
 
-run text area detect
+3. run building info extractor
 
-optionally check and correct outputs
+4. check metadata is ok in /results
 
-run contour analysis
+5. run text area detect
 
-run thermal analysis
+6. optionally check and correct outputs, copy to building plans corrected.csv. Can see what tesseract has detected by setting single building to true in text area detect, alternatively building plans corrected already has a complete set of results
 
-run model to simulate a building. only working with George Fox atm
+7. correct plans such that the external contour of the buildings does not intersect with the boxes of the plan and that doughnut shaped buildings have holes in the exterior, as detailed in report.
 
-haven't tested on other computers so probably will be issues...
+8. place corrected plans and all other plans to run further steps on in to building plans corrected, alternatively, corrected versions are available on teams.
 
-*Katie*
+9. run contour analysis, can check wether the correct contour has been found by adding the buildings name to disp_paths
 
-*Henry*
+10. run thermal analysis
+
+11. run model to simulate a building. only working with George Fox at the moment as data is not great for other buildings
+
+
+Final versions of the results I generated can be found in Chris/results
+
+
+#Katie
+
+#Henry
 
 *...*

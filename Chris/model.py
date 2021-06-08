@@ -6,7 +6,7 @@ import os
 
 cur_dir = os.path.dirname(os.path.realpath(__file__)) # gets directory
 
-data_dir = cur_dir + "\\past data"
+data_dir = cur_dir + "\\thermal data"
 thermal_results_csv_path = cur_dir + "\\results\\Thermal Results.csv"
 thermDF = pd.read_csv(thermal_results_csv_path, index_col = 0)
 building = "George Fox MC078"
@@ -14,7 +14,7 @@ data_csv_path = data_dir + "\\" + building + ".csv"
 is_data = True
 tempDF = pd.read_csv(data_csv_path, index_col = 0, parse_dates = True)
 is_data = True
-print(tempDF)
+
 start_time = 6
 end_time = 9
 #tempDF = tempDF[tempDF.index[start_time*12+12*12]:tempDF.index[start_time*12+12*12+(12-start_time)*12+end_time*12]]
@@ -22,11 +22,7 @@ tempDF = tempDF[41982:42129]
 tempDF = tempDF.resample("S").ffill()
 data_series = tempDF["Average"]
 data_list = data_series.tolist()
-print(data_series)
-print(tempDF)
 
-print(tempDF.keys)
-print(thermDF)
 T_out = 12 + 273
 U_wall = thermDF.at[building, "total_UA"]
 U_wall_ext = U_wall
@@ -83,7 +79,7 @@ result_degrees_air = result[:,1]/air_cap -273
 pd.DataFrame([[result_degrees_air]])
 d= {"Air Temperature": result_degrees_air, "Wall Temperature" : result_degrees_wall, "data" : data_list}
 df = pd.DataFrame(d, t_hours)
-df.to_csv(cur_dir + "\\results\\" + building)
+df.to_csv(cur_dir + "\\results\\" + building + ".csv")
 
 plt.plot(t_hours, result_degrees_air, label =  'Air Temp')
 plt.plot(t_hours, result_degrees_wall, label =  'Wall Temp')
