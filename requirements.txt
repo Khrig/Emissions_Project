@@ -1,0 +1,44 @@
+arviz @ file:///home/conda/feedstock_root/build_artifacts/arviz_1618947141331/work
+certifi==2020.12.5
+cftime @ file:///D:/bld/cftime_1612246574930/work
+cmdstanpy==0.9.68
+convertdate @ file:///home/conda/feedstock_root/build_artifacts/convertdate_1615678826465/work
+cycler==0.10.0
+Cython @ file:///D:/bld/cython_1618445481531/work
+ephem @ file:///D:/bld/ephem_1602326724695/work
+hijri-converter @ file:///home/conda/feedstock_root/build_artifacts/hijri-converter_1612531902526/work
+holidays @ file:///home/conda/feedstock_root/build_artifacts/holidays_1617373843485/work
+joblib @ file:///home/conda/feedstock_root/build_artifacts/joblib_1612898609989/work
+kiwisolver @ file:///D:/bld/kiwisolver_1610099948875/work
+korean-lunar-calendar @ file:///home/conda/feedstock_root/build_artifacts/korean_lunar_calendar_1589354365811/work
+LunarCalendar==0.0.9
+matplotlib @ file:///D:/bld/matplotlib-suite_1617212937240/work
+mkl-fft==1.2.1
+mkl-random==1.1.1
+mkl-service==2.3.0
+netCDF4 @ file:///D:/bld/netcdf4_1618867945328/work
+numpy @ file:///C:/ci/numpy_and_numpy_base_1603466732592/work
+olefile @ file:///home/conda/feedstock_root/build_artifacts/olefile_1602866521163/work
+packaging @ file:///home/conda/feedstock_root/build_artifacts/packaging_1612459636436/work
+pandas @ file:///C:/ci/pandas_1613684935103/work
+patsy==0.5.1
+Pillow==8.2.0
+prophet @ file:///D:/bld/prophet_1618853394287/work
+PyMeeus==0.5.11
+pyparsing==2.4.7
+pystan==2.19.1.1
+python-dateutil @ file:///home/ktietz/src/ci/python-dateutil_1611928101742/work
+pytz @ file:///tmp/build/80754af9/pytz_1612215392582/work
+scikit-learn @ file:///C:/ci/scikit-learn_1614446896245/work
+scipy @ file:///C:/ci/scipy_1616703433439/work
+setuptools-git==1.2
+six @ file:///C:/ci/six_1605187374963/work
+statsmodels==0.12.2
+threadpoolctl @ file:///tmp/tmp79xdzxkt/threadpoolctl-2.1.0-py3-none-any.whl
+tornado @ file:///D:/bld/tornado_1610094858390/work
+tqdm @ file:///home/conda/feedstock_root/build_artifacts/tqdm_1617680194207/work
+typing-extensions @ file:///home/conda/feedstock_root/build_artifacts/typing_extensions_1602702424206/work
+ujson==4.0.2
+wincertstore==0.2
+xarray @ file:///home/conda/feedstock_root/build_artifacts/xarray_1614346479764/work
+xgboost==1.3.3
