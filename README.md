@@ -1,6 +1,6 @@
-##Repository for fourth year project "Reducing Campus Emissions Using Machine Learning"##
+## Repository for fourth year project "Reducing Campus Emissions Using Machine Learning"
 
-#Chris
+# Chris
 
 ***
 
@@ -36,8 +36,8 @@ in addition to Chris/requirements.txt, tesseract will need to be installed.
 Final versions of the results I generated can be found in Chris/results
 
 
-#Katie
+# Katie
 
-#Henry
+# Henry
 
 *...*
